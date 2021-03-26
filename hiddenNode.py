@@ -17,7 +17,8 @@ class HiddenNode(object):
         self.inputX = inputX
         self.weight = 0.293873 #Random Value
         #sigmoid dervivative used for gradient descent
-        self.weightDerivative = -(self.inputX*e**(-self.inputX*self.weight))/((1+e**(-self.inputX*self.weight))**2)
+        #derivative of sigmoid = f(x)*f(-x)
+        self.weightDerivative = -self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)
 
     '''Functions'''
     def sigmoid(self, x: float) -> float:
