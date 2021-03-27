@@ -7,8 +7,8 @@ class OutputNode(object):
     weights: List of weights for each input
     ...
     Functions:
-    weightedSum: returns sum
-    out: returns weighted sum of all inputs * weights
+    weightedSum: returns weighted sum using list of inputs and list of weights
+    out: returns weightedSum of all inputs and weights
     '''
     def __init__(self, inputs: list):
         self.inputs = inputs
@@ -18,7 +18,6 @@ class OutputNode(object):
 
     '''Functions'''
     def weightedSum(self, inputs: list, weights: list) -> float:
-        #Weighted Sum
         weightsum = 0
         for i in range(len(inputs)):
             weightsum += inputs[i]*weights[i]
