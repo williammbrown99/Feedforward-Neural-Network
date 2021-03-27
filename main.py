@@ -35,11 +35,11 @@ numHiddenNodes = 20
 numIterations = 1000
 learningRate = 0.01
 
-#Initializing and Training Network
+'''Training'''
 nn = neuralNetwork.NeuralNetwork(numHiddenNodes)
 nn.train(trainingX, trainingY, numIterations, learningRate)
 
-#Predicting using Network
+'''Predicting'''
 print('Predicted Y:')
 #Reversing z-score normalization
 print(normalizedData.revZScore(nn.predict(testX)))
