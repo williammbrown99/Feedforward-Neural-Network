@@ -1,3 +1,5 @@
+import random
+
 class OutputNode(object):
     '''
     A class used to represent an output node
@@ -14,7 +16,11 @@ class OutputNode(object):
         self.inputs = inputs
         self.weights = []
         for i in range(len(inputs)):
-            self.weights.append(0.8263728) #Random Value
+            self.weights.append(random.random()) #Random Value
+        self.gradients = []
+        #gradients used to update weights
+        for i in range(len(self.weights)):
+            self.gradients.append([])
 
     '''Functions'''
     def weightedSum(self, inputs: list, weights: list) -> float:

@@ -3,19 +3,18 @@
 This file initializes a one hidden layer feedforward neural network to approximate a continuous function.
 The sample data is z-score normalized. 80% is used for training, 20% for testing
 The network is initialized with the number of hidden nodes in the hidden layer.
-The network trains using parameters: trainingX, trainingY, numIterations, learningRate.
+The network trains using parameters: trainingX, trainingY, numIterations, learningRate. batchSize
 The network gives a prediction using the given test data.
-
-This file does not import any external modules.
 '''
 
 '''Imports'''
 import normalize
 import neuralNetwork
+import random
 
 '''Data Preprocessing'''
-#Sample Data of 20 random X values
-sampleX = [-3, 18, 4, -19, 0, 6, -2, 17, -11, -3, 12, -4, 18, 2, 17, 8, 15, -7, 13, -10]
+#Sample Data of 100 random X values
+sampleX = [random.randint(0, 20) for i in range(100)]
 #Actual function to approximate: f(x) = 2x - 5
 sampleY = [2 * x - 5 for x in sampleX]
 
@@ -24,25 +23,26 @@ normalizedData = normalize.Normalize(sampleX+sampleY)
 normalizedX = normalizedData.zScore(sampleX)
 normalizedY = normalizedData.zScore(sampleY)
 #80% of sample data is used for training
-trainingX = normalizedX[:17]
-trainingY = normalizedY[:17]
+trainingX = normalizedX[:80]
+trainingY = normalizedY[:80]
 #20% of sample data is used for testing
-testX = normalizedX[17:]
-testY = normalizedY[17:]
+testX = normalizedX[80:]
+testY = normalizedY[80:]
 
 '''Parameters'''
-numHiddenNodes = 20
-numIterations = 1000
+numHiddenNodes = 9
+numIterations = 25000
 learningRate = 0.01
+batchSize = 3
 
 '''Training'''
 nn = neuralNetwork.NeuralNetwork(numHiddenNodes)
-nn.train(trainingX, trainingY, numIterations, learningRate)
+nn.train(trainingX, trainingY, numIterations, learningRate, batchSize)
 
 '''Predicting'''
 print('Predicted Y:')
-#Reversing z-score normalization
-print(normalizedData.revZScore(nn.predict(testX)))
+#Reversing z-score normalization and Rounding to nearest integer
+print([round(y) for y in normalizedData.revZScore(nn.predict(testX))])
 print('Actual Y:')
-print(sampleY[17:])
+print(sampleY[80:])
 

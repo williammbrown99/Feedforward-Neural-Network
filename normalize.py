@@ -1,6 +1,6 @@
 class Normalize(object):
     '''
-    A class used to normalize data.
+    A class used to normalize input into z-variables (Stochastic Normal Variable).
     ...
     Attributes:
     data: data being normalized
@@ -19,7 +19,9 @@ class Normalize(object):
 
     '''Functions'''
     def zScore(self, data: list) -> list:
+        '''Performing z-score normalization on a given list'''
         return [(x - self.mean)/self.stdDev for x in data]
 
     def revZScore(self, zScores: list) -> list:
+        '''reversing z-score normalization on a given list'''
         return [x*self.stdDev + self.mean for x in zScores]

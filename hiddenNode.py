@@ -1,3 +1,5 @@
+import random
+
 e = 2.718281828 #Approximate e value
 
 class HiddenNode(object):
@@ -15,14 +17,16 @@ class HiddenNode(object):
     '''
     def __init__(self, inputX: float):
         self.inputX = inputX
-        self.weight = 0.293873 #Random Value
+        self.weight = random.random() #Random Value
         #sigmoid dervivative used for gradient descent
         #derivative of sigmoid = f(x)*f(-x)
         self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)
+        #Gradients used to update weights
+        self.gradients = []
 
     '''Functions'''
     def sigmoid(self, x: float) -> float:
-        #Sigmoid Activation Function
+        '''Sigmoid Activation Function'''
         return 1/(1+e**(-x))
 
     @property
