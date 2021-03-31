@@ -15,26 +15,31 @@ class NeuralNetwork(object):
     costFunction: sum of squares function
     feed_forward: feeds an input x through the network
     back_propogation: performs gradient descent using: new_weight = old_weight - lr*gradient
-    hiddenGradient: returns derivative of cost function with respect to hiddenNode[i].weight
-    outputGradient: returns derivative of cost function with respect to outputNode.weights[i]
+    sigmoidGradient: returns derivative of cost function with respect to hiddenNode[i].weight
+    linearGradient: returns derivative of cost function with respect to outputNode.weights[i]
     train: trains the network and prints error every iteration
+    iterationErrorGraph: plots the Error vs Iteration Graph
     predict: predicts y values using given x values
     '''
     def __init__(self, numHiddenNodes: int):
         self.numHiddenNodes = numHiddenNodes
-        #Hidden layer nodes recieves default value: -1
+        #Hidden layer = list of hiddenNodes
         self.hiddenLayer= []
         hiddenNodeOutputs = []
         for i in range(self.numHiddenNodes):
+            #Hidden layer nodes recieves default value: -1
             self.hiddenLayer.append(hiddenNode.HiddenNode(-1))
             hiddenNodeOutputs.append(self.hiddenLayer[i].out)
         #Output node revieves all hidden node outputs
         self.outputNode1 = outputNode.OutputNode(hiddenNodeOutputs)
 
     '''Functions'''
-    def costFunction(self, y: float, predY: float) -> float:
-        '''Using sum of squares as error function'''
-        return (y - predY)**2
+    def mean_squared_error(self, y: list, predY: list) -> float:
+        '''Calculating Mean Squared Error'''
+        total = 0
+        for i in range(len(y)):
+            total += (y[i] - predY[i])**2
+        return total/len(y)
 
     def feed_forward(self, x: float) -> float:
         '''feeding x through the network.'''
@@ -98,16 +103,18 @@ class NeuralNetwork(object):
                 index += 1
             
             #Running batches through model
-            error = 0
+            #error = 0
+            predictions = []
             for i in range(batch_size):
                 #feeding x
-                self.feed_forward(batchX[i])
+                predictions.append(self.feed_forward(batchX[i]))
                 #adding error
-                error += self.costFunction(batchY[i], self.outputNode1.out)
+                # error += self.costFunction(batchY[i], self.outputNode1.out)
                 #appending gradient to nodes
                 for nodeNum in range(self.numHiddenNodes):
                     self.hiddenLayer[nodeNum].gradients.append(self.sigmoidGradient(batchY[i], nodeNum))
                     self.outputNode1.gradients[nodeNum].append(self.linearGradient(batchY[i], nodeNum))
+            error = self.mean_squared_error(batchY, predictions)
             print('Error: {}'.format(error))
             trainingErrors.append(error)
             #Applying back propogation
@@ -117,10 +124,9 @@ class NeuralNetwork(object):
 
     def iterationErrorGraph(self, num_iterations: int, trainingErrors: list) -> None:
         '''Plotting Error vs Iterations'''
-        # plotting the points 
         plt.plot(range(num_iterations), trainingErrors)
         
-        plt.xlabel('iterations')
+        plt.xlabel('Iterations')
         plt.ylabel('Error')
         
         plt.title('Error vs Iterations')
@@ -130,6 +136,5 @@ class NeuralNetwork(object):
         '''Making predictions from list X'''
         predictedY = []
         for i in range(len(X)):
-            self.feed_forward(X[i])
-            predictedY.append(self.outputNode1.out)
+            predictedY.append(self.feed_forward(X[i]))
         return predictedY

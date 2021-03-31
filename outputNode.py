@@ -31,4 +31,5 @@ class OutputNode(object):
 
     @property
     def out(self) -> float:
+        #Linear Activation function: f(x) = x
         return self.weightedSum(self.inputs, self.weights)

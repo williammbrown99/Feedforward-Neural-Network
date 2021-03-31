@@ -16,7 +16,7 @@ import random
 #Sample Data of 100 random X values
 sampleX = [random.randint(0, 20) for i in range(100)]
 #Actual function to approximate: f(x) = 2x - 5
-sampleY = [2 * x - 5 for x in sampleX]
+sampleY = [2*x - 5 for x in sampleX]
 
 #z-score normalizing the sample data
 normalizedData = normalize.Normalize(sampleX+sampleY)
@@ -30,10 +30,10 @@ testX = normalizedX[80:]
 testY = normalizedY[80:]
 
 '''Parameters'''
-numHiddenNodes = 9
-numIterations = 25000
+numHiddenNodes = 5
+numIterations = 50000
 learningRate = 0.01
-batchSize = 3
+batchSize = 1
 
 '''Training'''
 nn = neuralNetwork.NeuralNetwork(numHiddenNodes)
