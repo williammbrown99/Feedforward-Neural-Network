@@ -14,7 +14,7 @@ import random
 
 '''Data Preprocessing'''
 #Sample Data of 100 random X values
-sampleX = [random.randint(0, 20) for i in range(100)]
+sampleX = [random.randint(-10, 10) for i in range(100)]
 #Actual function to approximate: f(x) = 2x - 5
 sampleY = [2*x - 5 for x in sampleX]
 
@@ -30,7 +30,7 @@ testX = normalizedX[80:]
 testY = normalizedY[80:]
 
 '''Parameters'''
-numHiddenNodes = 5
+numHiddenNodes = 10
 numIterations = 50000
 learningRate = 0.01
 batchSize = 1
