@@ -27,6 +27,11 @@ class HiddenNode(object):
     '''Functions'''
     def sigmoid(self, x: float) -> float:
         '''Sigmoid Activation Function'''
+        #Avoiding Overflow
+        if x > 500:
+            return 1.0
+        elif x < -500:
+            return 0.0
         return 1/(1+e**(-x))
 
     @property

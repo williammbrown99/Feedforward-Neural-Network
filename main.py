@@ -13,36 +13,42 @@ import neuralNetwork
 import random
 
 '''Data Preprocessing'''
-#Sample Data of 100 random X values
-sampleX = [random.randint(-10, 10) for i in range(100)]
-#Actual function to approximate: f(x) = 2x - 5
-sampleY = [2*x - 5 for x in sampleX]
+#Sample Data of 100 random X integers between -50 and 49
+sampleX = [random.randint(-50, 50) for i in range(100)]
+#Actual function to approximate: f(x) = 3x - 50
+sampleY = [3*x - 50 for x in sampleX]
 
 #z-score normalizing the sample data
 normalizedData = normalize.Normalize(sampleX+sampleY)
 normalizedX = normalizedData.zScore(sampleX)
 normalizedY = normalizedData.zScore(sampleY)
-#80% of sample data is used for training
-trainingX = normalizedX[:80]
-trainingY = normalizedY[:80]
+#60% of sample data is used for training
+trainingX = normalizedX[:60]
+trainingY = normalizedY[:60]
+#20% of sample data is used for validation
+validationX = normalizedX[60:80]
+validationY = normalizedY[60:80]
 #20% of sample data is used for testing
 testX = normalizedX[80:]
 testY = normalizedY[80:]
 
 '''Parameters'''
 numHiddenNodes = 10
-numIterations = 50000
-learningRate = 0.01
+numIterations = 10000
+learningRate = 0.03
 batchSize = 1
 
 '''Training'''
+#One hidden layer Neural Network: (Universal approximation theorem)
 nn = neuralNetwork.NeuralNetwork(numHiddenNodes)
-nn.train(trainingX, trainingY, numIterations, learningRate, batchSize)
+nn.train(trainingX, trainingY, validationX, validationY, numIterations, learningRate, batchSize)
 
-'''Predicting'''
+'''Evaluating'''
 print('Predicted Y:')
 #Reversing z-score normalization and Rounding to nearest integer
-print([round(y) for y in normalizedData.revZScore(nn.predict(testX))])
+predictions = [round(y) for y in normalizedData.revZScore(nn.predict(testX))]
+print(predictions)
 print('Actual Y:')
 print(sampleY[80:])
+print('Test Error: {}'.format(nn.mean_squared_error(sampleY[80:], predictions)))
 

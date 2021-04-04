@@ -69,6 +69,16 @@ class NeuralNetwork(object):
             self.hiddenLayer[i].weight = self.hiddenLayer[i].weight - lr*avgHiddenGradient
             self.outputNode1.weights[i] = self.outputNode1.weights[i] - lr*avgOutputGradient
 
+            #Weights must be between -100 and 100
+            if self.hiddenLayer[i].weight > 100:
+                self.hiddenLayer[i].weight = 100
+            elif self.hiddenLayer[i].weight < -100:
+                self.hiddenLayer[i].weight = -100
+            if self.outputNode1.weights[i] > 100:
+                self.outputNode1.weights[i] = 100
+            elif self.outputNode1.weights[i] < -100:
+                self.outputNode1.weights[i] = -100
+
             #Reseting gradients to empty
             self.hiddenLayer[i].gradients = []
             self.outputNode1.gradients[i] = []
@@ -87,11 +97,13 @@ class NeuralNetwork(object):
         '''
         return 2*(y-self.outputNode1.out)*(-self.hiddenLayer[index].out)
 
-    def train(self, X: list, Y: list, num_iterations: int, lr: float, batch_size: int) -> None:
+    def train(self, X: list, Y: list, valX: list, valY: list, num_iterations: int, lr: float, batch_size: int) -> None:
         '''Training model'''
         index = 0 #Cycling through training data
         trainingErrors = [] #Training Errors used for graphing Error vs Iterations
+        validationErrors = [] #Validation Errors used for graphing Error vs Iterations
         for i in range(num_iterations):
+            print('Iteration: {}/{}'.format(i, num_iterations))
             #Creating Batches
             batchX = []
             batchY = []
@@ -103,33 +115,39 @@ class NeuralNetwork(object):
                 index += 1
             
             #Running batches through model
-            #error = 0
             predictions = []
             for i in range(batch_size):
                 #feeding x
                 predictions.append(self.feed_forward(batchX[i]))
-                #adding error
-                # error += self.costFunction(batchY[i], self.outputNode1.out)
                 #appending gradient to nodes
                 for nodeNum in range(self.numHiddenNodes):
                     self.hiddenLayer[nodeNum].gradients.append(self.sigmoidGradient(batchY[i], nodeNum))
                     self.outputNode1.gradients[nodeNum].append(self.linearGradient(batchY[i], nodeNum))
             error = self.mean_squared_error(batchY, predictions)
-            print('Error: {}'.format(error))
+            #Validation Testing
+            valPredictions = []
+            for i in range(len(valX)):
+                valPredictions.append(self.feed_forward(valX[i]))
+            valError = self.mean_squared_error(valY, valPredictions)
+            print('Training Error: {}           Validation Error: {}'.format(error, valError))
             trainingErrors.append(error)
+            validationErrors.append(valError)
             #Applying back propogation
             self.back_propogation(lr)
         #Graphing Error vs Iterations
-        self.iterationErrorGraph(num_iterations, trainingErrors)
+        self.iterationErrorGraph(num_iterations, trainingErrors, validationErrors)
 
-    def iterationErrorGraph(self, num_iterations: int, trainingErrors: list) -> None:
+    def iterationErrorGraph(self, num_iterations: int, trainingErrors: list, validationErrors: list) -> None:
         '''Plotting Error vs Iterations'''
-        plt.plot(range(num_iterations), trainingErrors)
+        plt.plot(range(num_iterations), trainingErrors, label='Training Error')
+        plt.plot(range(num_iterations), validationErrors, label='Validation Error')
         
         plt.xlabel('Iterations')
         plt.ylabel('Error')
         
         plt.title('Error vs Iterations')
+        plt.legend()
+
         plt.show()
 
     def predict(self, X: list) -> list:
@@ -138,3 +156,4 @@ class NeuralNetwork(object):
         for i in range(len(X)):
             predictedY.append(self.feed_forward(X[i]))
         return predictedY
+        
