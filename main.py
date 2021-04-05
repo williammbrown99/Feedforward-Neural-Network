@@ -13,8 +13,8 @@ import neuralNetwork
 import random
 
 '''Data Preprocessing'''
-#Sample Data of 100 random X integers between -50 and 49
-sampleX = [random.randint(-50, 50) for i in range(100)]
+#Sample Data of 100 random X integers between -20 and 20
+sampleX = [random.randint(-20, 21) for i in range(100)]
 #Actual function to approximate: f(x) = 3x - 50
 sampleY = [3*x - 50 for x in sampleX]
 
@@ -33,10 +33,10 @@ testX = normalizedX[80:]
 testY = normalizedY[80:]
 
 '''Parameters'''
-numHiddenNodes = 5
-numIterations = 2000
-learningRate = 0.03
-batchSize = 60
+numHiddenNodes = 8
+numIterations = 5000
+learningRate = 0.01
+batchSize = 4
 
 '''Training'''
 #One hidden layer Neural Network: (Universal approximation theorem)
