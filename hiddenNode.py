@@ -20,7 +20,7 @@ class HiddenNode(object):
         self.weight = random.random() #Random Value
         #sigmoid dervivative used for gradient descent
         #derivative of sigmoid = f(x)*f(-x)
-        self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)
+        self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)*self.inputX
         #Gradients used to update weights
         self.gradients = []
 
