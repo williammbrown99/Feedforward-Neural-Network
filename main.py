@@ -15,8 +15,8 @@ import random
 '''Data Preprocessing'''
 #Sample Data of 100 random X integers between -20 and 20
 sampleX = [random.randint(-20, 21) for i in range(100)]
-#Actual function to approximate: f(x) = 3x - 50
-sampleY = [3*x - 50 for x in sampleX]
+#Actual function to approximate: f(x) = 3x - 5
+sampleY = [3*x - 5 for x in sampleX]
 
 #z-score normalizing the sample data
 normalizedData = normalize.Normalize(sampleX+sampleY)
@@ -33,10 +33,10 @@ testX = normalizedX[80:]
 testY = normalizedY[80:]
 
 '''Parameters'''
-numHiddenNodes = 8
-numIterations = 5000
-learningRate = 0.01
-batchSize = 4
+numHiddenNodes = 16
+numIterations = 500
+learningRate = 0.03
+batchSize = 60
 
 '''Training'''
 #One hidden layer Neural Network: (Universal approximation theorem)

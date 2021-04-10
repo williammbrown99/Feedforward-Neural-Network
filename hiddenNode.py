@@ -18,13 +18,18 @@ class HiddenNode(object):
     def __init__(self, inputX: float):
         self.inputX = inputX
         self.weight = random.random() #Random Value
-        #sigmoid dervivative used for gradient descent
-        #derivative of sigmoid = f(x)*f(-x)
-        self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)*self.inputX
+        self.passX(inputX)
+        #self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)*self.inputX
         #Gradients used to update weights
         self.gradients = []
 
     '''Functions'''
+    def passX(self, x: float) -> None:
+        self.inputX = x
+        #sigmoid dervivative used for gradient descent
+        #derivative of sigmoid = f(x)*f(-x)
+        self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)*self.inputX
+
     def sigmoid(self, x: float) -> float:
         '''Sigmoid Activation Function'''
         #Avoiding Overflow

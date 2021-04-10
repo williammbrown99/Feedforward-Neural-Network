@@ -46,7 +46,7 @@ class NeuralNetwork(object):
         hiddenNodeOutputs = []
         #Passing input X to each hidden node
         for i in range(self.numHiddenNodes):
-            self.hiddenLayer[i].inputX = x
+            self.hiddenLayer[i].passX(x)
             hiddenNodeOutputs.append(self.hiddenLayer[i].out)
         #Passing all hidden node outputs to the output node
         self.outputNode1.inputs = hiddenNodeOutputs
@@ -68,6 +68,9 @@ class NeuralNetwork(object):
             #Updating weights
             self.hiddenLayer[i].weight = self.hiddenLayer[i].weight - lr*avgHiddenGradient
             self.outputNode1.weights[i] = self.outputNode1.weights[i] - lr*avgOutputGradient
+
+            #Updating hiddenNode sigmoid Derivatives
+            #self.hiddenLayer[i].derivativeCalc()
 
             #Weights must be between -100 and 100
             if self.hiddenLayer[i].weight > 100:

@@ -15,11 +15,10 @@ class OutputNode(object):
     def __init__(self, inputs: list):
         self.inputs = inputs
         self.weights = []
+        #gradients used to update weights
+        self.gradients = []
         for i in range(len(inputs)):
             self.weights.append(random.random()) #Random Value
-        self.gradients = []
-        #gradients used to update weights
-        for i in range(len(self.weights)):
             self.gradients.append([])
 
     '''Functions'''
