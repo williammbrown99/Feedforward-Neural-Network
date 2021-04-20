@@ -34,6 +34,11 @@ class NeuralNetwork(object):
         self.outputNode1 = outputNode.OutputNode(hiddenNodeOutputs)
 
     '''Functions'''
+    # def addLayer(self, numHiddenNodes: int) -> None:
+    #     if len(self.hiddenLayers) == 0:
+    #         hiddenNodeOutputs = []
+
+
     def mean_squared_error(self, y: list, predY: list) -> float:
         '''Calculating Mean Squared Error'''
         total = 0
@@ -46,7 +51,7 @@ class NeuralNetwork(object):
         hiddenNodeOutputs = []
         #Passing input X to each hidden node
         for i in range(self.numHiddenNodes):
-            self.hiddenLayer[i].passX(x)
+            self.hiddenLayer[i].passX(x, self.outputNode1.weights[i])
             hiddenNodeOutputs.append(self.hiddenLayer[i].out)
         #Passing all hidden node outputs to the output node
         self.outputNode1.inputs = hiddenNodeOutputs
@@ -69,29 +74,9 @@ class NeuralNetwork(object):
             self.hiddenLayer[i].weight = self.hiddenLayer[i].weight - lr*avgHiddenGradient
             self.outputNode1.weights[i] = self.outputNode1.weights[i] - lr*avgOutputGradient
 
-            #Updating hiddenNode sigmoid Derivatives
-            #self.hiddenLayer[i].derivativeCalc()
-
-            #Weights must be between -100 and 100
-            if self.hiddenLayer[i].weight > 100:
-                self.hiddenLayer[i].weight = 100
-            elif self.hiddenLayer[i].weight < -100:
-                self.hiddenLayer[i].weight = -100
-            if self.outputNode1.weights[i] > 100:
-                self.outputNode1.weights[i] = 100
-            elif self.outputNode1.weights[i] < -100:
-                self.outputNode1.weights[i] = -100
-
             #Reseting gradients to empty
             self.hiddenLayer[i].gradients = []
             self.outputNode1.gradients[i] = []
-
-    def sigmoidGradient(self, y: float, index: int) -> float:
-        '''
-        Calculating the derivative of the sum of squares function with respect to the given hidden weight
-        Using the chain rule
-        '''
-        return 2*(y - self.outputNode1.out)*(-self.outputNode1.weights[index]*self.hiddenLayer[index].sigmoidDerivative)
 
     def linearGradient(self, y: float, index: int) -> float:
         '''
@@ -124,8 +109,8 @@ class NeuralNetwork(object):
                 predictions.append(self.feed_forward(batchX[i]))
                 #appending gradient to nodes
                 for nodeNum in range(self.numHiddenNodes):
-                    self.hiddenLayer[nodeNum].gradients.append(self.sigmoidGradient(batchY[i], nodeNum))
                     self.outputNode1.gradients[nodeNum].append(self.linearGradient(batchY[i], nodeNum))
+                    self.hiddenLayer[nodeNum].addGradient(batchY[i], self.outputNode1.out)
             error = self.mean_squared_error(batchY, predictions)
             #Validation Testing
             valPredictions = []

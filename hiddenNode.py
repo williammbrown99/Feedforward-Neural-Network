@@ -18,17 +18,25 @@ class HiddenNode(object):
     def __init__(self, inputX: float):
         self.inputX = inputX
         self.weight = random.random() #Random Value
-        self.passX(inputX)
-        #self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)*self.inputX
+        #Updating Derivative
+        self.passX(inputX, 1) #init nextWeight = 1
         #Gradients used to update weights
         self.gradients = []
 
     '''Functions'''
-    def passX(self, x: float) -> None:
+    def passX(self, x: float, nextWeight: float) -> None:
         self.inputX = x
         #sigmoid dervivative used for gradient descent
         #derivative of sigmoid = f(x)*f(-x)
-        self.sigmoidDerivative = self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)*self.inputX
+        self.sigmoidDerivative = (self.sigmoid(self.inputX*self.weight)*self.sigmoid(-self.inputX*self.weight)
+                                    *self.inputX*nextWeight)
+
+    def addGradient(self, actualY: float, predY: float) -> None:
+        '''
+        Calculating the derivative of the sum of squares function with respect to the given hidden weight
+        Using the chain rule
+        '''
+        self.gradients.append(2*(actualY - predY)*(-self.sigmoidDerivative))
 
     def sigmoid(self, x: float) -> float:
         '''Sigmoid Activation Function'''
