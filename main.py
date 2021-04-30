@@ -36,7 +36,7 @@ testY = normalizedY[80:]
 numHiddenNodes = 10
 numIterations = 500
 learningRate = 0.03
-batchSize = 60
+batchSize = 30
 
 '''Training'''
 #One hidden layer Neural Network: (Universal approximation theorem)
