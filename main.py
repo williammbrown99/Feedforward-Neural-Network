@@ -33,10 +33,10 @@ testX = normalizedX[80:]
 testY = normalizedY[80:]
 
 '''Parameters'''
-numHiddenNodes = 16
+numHiddenNodes = 10
 numIterations = 500
 learningRate = 0.03
-batchSize = 10
+batchSize = 60
 
 '''Training'''
 #One hidden layer Neural Network: (Universal approximation theorem)
